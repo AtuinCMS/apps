@@ -1,0 +1,31 @@
+{
+  "name": "atuin/apps",
+  "description": "Atuin App System",
+  "keywords": [
+    "yii",
+    "yii2",
+    "atuin"
+  ],
+  "type": "yii2-extension",
+  "version": "0.1",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Joseba",
+      "email": "joseba.juaniz@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "yiisoft/yii2": ">=2.0.4",
+    "atuin/engine": "*",
+    "2amigos/yii2-tinymce-widget": "*",
+    "kartik-v/yii2-grid": "*",
+    "cyneek/yii2-widget-urlparser": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "atuin\\apps\\": ""
+    }
+  }
+}
