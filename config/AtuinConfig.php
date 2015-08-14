@@ -2,10 +2,10 @@
 
 namespace atuin\apps\config;
 
-use atuin\apps\models\Page;
-use atuin\apps\models\PageDesign;
-use atuin\apps\models\PageReference;
-use atuin\apps\models\PageSections;
+use atuin\engine\models\Page;
+use atuin\engine\models\PageDesign;
+use atuin\engine\models\PageReference;
+use atuin\engine\models\PageSections;
 use atuin\apps\models\Plugin;
 use atuin\config\models\ModelConfig;
 use atuin\engine\widgets\staticPage\models\StaticPlugin;
