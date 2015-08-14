@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 
-/* @var \atuin\apps\widgets\staticPage\models\StaticPlugin $staticPlugin */
+/* @var \atuin\engine\widgets\staticPage\models\StaticPlugin $staticPlugin */
 
 $this->title = Yii::t('admin', 'View static page');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Pages'), 'url' => ['index']];

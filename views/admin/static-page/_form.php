@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 
-/* @var \atuin\apps\widgets\staticPage\models\StaticPlugin $staticPlugin */
+/* @var \atuin\engine\widgets\staticPage\models\StaticPlugin $staticPlugin */
 ?>
 
 
@@ -20,8 +20,8 @@ use yii\widgets\ActiveForm;
     'language' => 'es',
     'clientOptions' => ['plugins' => ["advlist autolink lists link charmap print preview anchor",
         "searchreplace visualblocks code fullscreen",
-        "insertdatetime media table contextmenu paste"],
-        'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"]]);
+        "insertdatetime media table contextmenu paste", "image", "imagetools"],
+        'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link imagetools"]]);
 ?>
 
 <div class="form-group">

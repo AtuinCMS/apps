@@ -8,7 +8,7 @@ use atuin\apps\models\PageReference;
 use atuin\apps\models\PageSections;
 use atuin\apps\models\Plugin;
 use atuin\config\models\ModelConfig;
-use atuin\apps\widgets\staticPage\models\StaticPlugin;
+use atuin\engine\widgets\staticPage\models\StaticPlugin;
 
 /**
  * Class ConfigSkeleton

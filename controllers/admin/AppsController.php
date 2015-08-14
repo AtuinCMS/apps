@@ -26,7 +26,15 @@ class AppsController extends BaseAdminController
         return $this->render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
     }
     
+    /**
+     * Panel to add new Atuin Apps
+     * 
+     * @return string
+     */
     
-    
+    public function actionAdd()
+    {
+        return $this->render('add_app');
+    }
     
 }

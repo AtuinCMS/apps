@@ -20,7 +20,7 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
 
     private function pageTableName()
     {
-        return \atuin\apps\models\Page::tableName();
+        return \atuin\engine\models\Page::tableName();
     }
 
     private function pluginTableName()
@@ -30,27 +30,27 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
 
     private function pagePluginTableName()
     {
-        return \atuin\apps\models\PagePluginData::tableName();
+        return \atuin\engine\models\PagePluginData::tableName();
     }
 
     private function staticPluginTableName()
     {
-        return \atuin\apps\widgets\staticPage\models\StaticPlugin::tableName();
+        return \atuin\engine\widgets\staticPage\models\StaticPlugin::tableName();
     }
 
     private function pageDesignableName()
     {
-        return \atuin\apps\models\PageDesign::tableName();
+        return \atuin\engine\models\PageDesign::tableName();
     }
 
     private function pageReferenceTableName()
     {
-        return \atuin\apps\models\PageReference::tableName();
+        return \atuin\engine\models\PageReference::tableName();
     }
 
     private function pageSectionsTableName()
     {
-        return \atuin\apps\models\PageSections::tableName();
+        return \atuin\engine\models\PageSections::tableName();
     }
 
     public function safeUp()
@@ -85,6 +85,7 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
         $this->createIndex('{{%apps_className}}', $this->appsTableName(), ['className'], TRUE);
         $this->createIndex('{{%apps_backend_status}}', $this->appsTableName(), ['backend', 'status']);
         $this->createIndex('{{%apps_frontend_status}}', $this->appsTableName(), ['frontend', 'status']);
+        $this->createIndex('{{%apps_core_module}}', $this->appsTableName(), ['core_module']);
 
 
         /**
