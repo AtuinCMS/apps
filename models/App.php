@@ -9,16 +9,17 @@ use yii\base\Event;
 use yii\caching\TagDependency;
 use yii\db\ActiveRecord;
 
-
 /**
  * Class App
  * @package common\engine\atuin\apps\models
  *
  * @property int $id
  * @property string $name
+ * @property string $description
  * @property string $className
  * @property string $directory
  * @property string $namespace
+ * @property string $version
  * @property string $alias
  * @property string $install_date
  * @property string $status

@@ -66,9 +66,11 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
         $this->createTable($this->appsTableName(), [
             'id' => Schema::TYPE_PK,
             'name' => Schema::TYPE_STRING . '(25) NOT NULL',
+            'description' => Schema::TYPE_TEXT,
             'className' => Schema::TYPE_STRING . '(255) NOT NULL',
             'directory' => Schema::TYPE_STRING . '(255) NOT NULL',
             'namespace' => Schema::TYPE_STRING . '(255) NOT NULL',
+            'version' => Schema::TYPE_STRING . '(50) NOT NULL',
             'alias' => Schema::TYPE_STRING . '(255) NOT NULL',
             'install_date' => Schema::TYPE_DATETIME,
             'status' => "enum('active', 'inactive') DEFAULT 'inactive'",

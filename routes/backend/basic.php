@@ -18,9 +18,20 @@ Route::filter('checkStaticPage', function () {
 
 });
 
+/**
+ * Static Pages
+ */
 
 Route::any('pages/static', 'apps/admin/static-page');
 Route::any('pages/static/create', 'apps/admin/static-page/create');
 Route::any('pages/static/update/{id}', 'apps/admin/static-page/update', ['before' => ['before' => 'checkStaticPage']]);
 Route::post('pages/static/delete/{id}', 'apps/admin/static-page/delete', ['before' => ['before' => 'checkStaticPage']]);
 Route::get('pages/static/view/{id}', 'apps/admin/static-page/view', ['before' => ['before' => 'checkStaticPage']]);
+
+
+/**
+ * Apps
+ */
+
+Route::get('apps', 'apps/admin/apps');
+Route::any('apps/add', 'apps/admin/apps/add');
