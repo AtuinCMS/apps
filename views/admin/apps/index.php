@@ -5,37 +5,6 @@
 use yii\helpers\Html;
 
 $this->title = Yii::t('admin', 'Pages');
-
-?>
-
-<?php
-
-$a = [
-
-    \atuin\apps\Module::className() => [
-        'id' => \atuin\apps\Module::getId(),
-        'composerPackage' => 'atuin/atuin-user:dev-master',
-        'namespace' =>\atuin\apps\Module::className(),
-        'version' => '0.0.1'
-    ],
-    \atuin\routes\Module::className() => [
-        'id' => \atuin\routes\Module::getId(),
-        'composerPackage' => 'atuin/atuin-user:dev-master',
-        'namespace' => \atuin\routes\Module::className(),
-        'version' => '0.0.1'
-    ],
-    'cacafuti' => [
-        'id' => 'cacafuti',
-        'composerPackage' => 'cacafuti',
-        'namespace' => 'cacafuti',
-    'version' => '0.0.1'
-    ]
-
-];
-
-echo json_encode($a);
-die();
-
 ?>
 
 <div class="content-header">

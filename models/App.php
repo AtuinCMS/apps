@@ -106,10 +106,6 @@ class App extends ActiveRecord
 
     public function getIsUpdated()
     {
-        echo '<pre>';
-            var_dump('uuuuu entra');
-        echo '</pre>';
-        die();
         if (is_null($this->_isUpdated)) {
             $appMarket = ModelApp::getAppMarket();
 

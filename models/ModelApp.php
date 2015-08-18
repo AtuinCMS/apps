@@ -8,8 +8,6 @@ use atuin\installation\app_installation\AppLoader;
 use atuin\installation\app_installation\AppManagement;
 use atuin\installation\app_installation\helpers\FactoryCommandHelper;
 use atuin\installation\helpers\ComposerAppHandler;
-use League\Flysystem\Adapter\Local as Adapter;
-use League\Flysystem\Filesystem;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\base\Model;
@@ -73,12 +71,19 @@ class ModelApp extends Model
         $appList = [];
 
         foreach ($urls as $url) {
-            $routeInfo = pathinfo($url);
 
-            $urlSystem = new Filesystem(new Adapter($routeInfo['dirname']));
-            $data = json_decode($urlSystem->read($routeInfo['basename']), TRUE);
+            // Get the json data with a timeout of 5 seconds
+            $ctx = stream_context_create(array(
+                    'http' => array(
+                        'timeout' => 5
+                    )
+                )
+            );
+            
+            $data = @file_get_contents($url, 0, $ctx);
 
-            if (is_array($data)) {
+            if ($data !== FALSE) {
+                $data = json_decode($data, TRUE);
                 $appList = Yii\helpers\ArrayHelper::merge($appList, $data);
             }
         }
@@ -129,7 +134,7 @@ class ModelApp extends Model
         // or another one (right now we only support composer installations).
         $installationHandler = NULL;
 
-        if (FactoryCommandHelper::composer()->check()) {
+        if (FactoryCommandHelper::composer()->check() and array_key_exists('composerPackage', $appData)) {
             /** @var ComposerAppHandler $installationHandler */
             $installationHandler = new ComposerAppHandler($appData);
         } else {
