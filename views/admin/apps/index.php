@@ -1,10 +1,40 @@
 <?php
 /* @var $this yii\web\View */
-/* @var $searchModel \atuin\engine\widgets\staticPage\models\StaticPluginSearch */
+/* @var $searchModel \atuin\apps\models\searchs\AppSearch */
 /* @var $dataProvider \yii\data\ActiveDataProvider */
 use yii\helpers\Html;
 
 $this->title = Yii::t('admin', 'Pages');
+
+?>
+
+<?php
+
+$a = [
+
+    \atuin\apps\Module::className() => [
+        'id' => \atuin\apps\Module::getId(),
+        'composerPackage' => 'atuin/atuin-user:dev-master',
+        'namespace' =>\atuin\apps\Module::className(),
+        'version' => '0.0.1'
+    ],
+    \atuin\routes\Module::className() => [
+        'id' => \atuin\routes\Module::getId(),
+        'composerPackage' => 'atuin/atuin-user:dev-master',
+        'namespace' => \atuin\routes\Module::className(),
+        'version' => '0.0.1'
+    ],
+    'cacafuti' => [
+        'id' => 'cacafuti',
+        'composerPackage' => 'cacafuti',
+        'namespace' => 'cacafuti',
+    'version' => '0.0.1'
+    ]
+
+];
+
+echo json_encode($a);
+die();
 
 ?>
 
@@ -29,9 +59,36 @@ $this->title = Yii::t('admin', 'Pages');
                         'gridHookName' => 'appsPageGrid',
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
-
                             'name',
-                            'install_date'
+                            'version',
+                            'install_date',
+                            'description',
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'buttons' => [
+                                    'view' => function ($url, $model, $key) {
+                                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
+                                            'title' => Yii::t('yii', 'View')]);
+                                    },
+                                    'update' => function ($url, $model, $key) {
+                                        if ($model->isUpdated == FALSE) {
+                                            return Html::a('<span class="glyphicon glyphicon-refresh"></span>', $url, [
+                                                'title' => Yii::t('yii', 'Update')]);
+                                        }
+
+                                    },
+                                    'delete' => function ($url, $model, $key) {
+                                        if ($model->core_module == 0) {
+                                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                                                'title' => Yii::t('yii', 'Delete'),
+                                                'data-confirm' => Yii::t('yii', 'Are you sure to delete this item?'),
+                                                'data-method' => 'post',
+                                            ]);
+                                        }
+                                    }
+                                ]
+                            ]
+
 
                         ],
                     ]

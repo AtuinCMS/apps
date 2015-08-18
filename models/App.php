@@ -29,6 +29,9 @@ use yii\db\ActiveRecord;
  */
 class App extends ActiveRecord
 {
+
+    protected $_isUpdated;
+
     public static function tableName()
     {
         return 'apps';
@@ -61,10 +64,8 @@ class App extends ActiveRecord
         $frontend = [0, 1];
         $backend = [0, 1];
 
-        foreach ($frontend as $_f)
-        {
-            foreach ($backend as $_b)
-            {
+        foreach ($frontend as $_f) {
+            foreach ($backend as $_b) {
                 TagDependency::invalidate(Yii::$app->cache, self::makeCacheTag($_f, $_b));
             }
         }
@@ -77,31 +78,50 @@ class App extends ActiveRecord
 
     /**
      * Returns all the connections of the Apps in the AppConnections Active Record
-     * 
+     *
      * Useful to retrieve all the configs, pages and extra data that Apps have
-     * 
-     * 
+     *
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getAppConnections()
     {
         return $this->hasMany(AppConnections::className(), ['app_id' => 'id']);
     }
-    
-    
+
+
     /**
      * Retrieves all the Configs assigned to the filtered Apps using AppConnections
-     * as junction table. 
-     * 
+     * as junction table.
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getConfigs()
     {
         return $this->hasMany(Config::className(), ['id' => 'reference_id'])
-            ->via('appConnections', function($query){
+            ->via('appConnections', function ($query) {
                 $query->where(['type' => Config::className()]);
             });
     }
-    
+
+    public function getIsUpdated()
+    {
+        echo '<pre>';
+            var_dump('uuuuu entra');
+        echo '</pre>';
+        die();
+        if (is_null($this->_isUpdated)) {
+            $appMarket = ModelApp::getAppMarket();
+
+            if (array_key_exists($this->namespace, $appMarket) && $appMarket['namespace']['version'] != $this->version) {
+                $this->_isUpdated = FALSE;
+            } else {
+                $this->_isUpdated = TRUE;
+            }
+        }
+
+        return $this->_isUpdated;
+
+    }
 
 }

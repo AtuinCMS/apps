@@ -15,15 +15,13 @@ class AppSearch extends App
      */
     public function search($params)
     {
-        $query = App::find()->where(['core_module' => 0]);
+        $query = App::find();
         
         // create data provider
-        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
-
+        
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }

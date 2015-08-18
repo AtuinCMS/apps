@@ -33,11 +33,6 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
         return \atuin\engine\models\PagePluginData::tableName();
     }
 
-    private function staticPluginTableName()
-    {
-        return \atuin\engine\widgets\staticPage\models\StaticPlugin::tableName();
-    }
-
     private function pageDesignableName()
     {
         return \atuin\engine\models\PageDesign::tableName();
@@ -116,7 +111,6 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
         $this->createTable($this->pageTableName(), [
             'id' => Schema::TYPE_PK,
             'name' => Schema::TYPE_STRING . '(255)',
-       //     'type' => "enum('static', 'dynamic') DEFAULT 'static'",
             // will hold extra info for the page like classes that depend from them
             'parameters' => Schema::TYPE_TEXT
         ], $tableOptions);
@@ -161,21 +155,6 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
         $this->createIndex('{{%pageplugin_classname}}', $this->pagePluginTableName(), ['className', 'reference_id']);
         $this->createIndex('{{%pageplugin_app_id}}', $this->pagePluginTableName(), ['plugin_id', 'plugin_reference_id']);
 
-
-        /**
-         * Static Plugin for Static Pages
-         */
-        $this->createTable($this->staticPluginTableName(), [
-            'id' => Schema::TYPE_PK,
-            'title' => Schema::TYPE_STRING . '(255) NOT NULL',
-            'url' => Schema::TYPE_STRING . '(255) NOT NULL',
-            'text' => Schema::TYPE_TEXT,
-            'creation_date' => Schema::TYPE_DATETIME,
-            'update_date' => Schema::TYPE_DATETIME,
-            'author_id' => Schema::TYPE_INTEGER,
-            'last_editor_id' => Schema::TYPE_INTEGER
-        ], $tableOptions);
-
         /**
          * Sections that will hold the plugins in the pages
          */
@@ -191,7 +170,9 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
          * This table will hold the specifics to link the page designs with the
          * pages per se. We are using a junction table because probably we will
          * need different page designs for the same page depending from the data
-         * it's loaded in them
+         * it's loaded in them.
+         * 
+         * If reference_id it's null we will count that rows as the default designs for those pages
          */
         $this->createTable($this->pageReferenceTableName(), [
             'id' => Schema::TYPE_PK,
@@ -207,13 +188,16 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
 
 
         // add indexes for performance optimization
-        $this->createIndex('{{%pagedesign_classname}}', $this->pageReferenceTableName(), ['className', 'reference_id']);
-        $this->createIndex('{{%pagedesign_page_id}}', $this->pageReferenceTableName(), ['page_id']);
-        $this->createIndex('{{%pagedesign_page_all}}', $this->pageReferenceTableName(), ['page_id', 'className', 'reference_id']);
+        $this->createIndex('{{%pagereference_classname}}', $this->pageReferenceTableName(), ['className', 'reference_id']);
+        $this->createIndex('{{%pagereference_page_id}}', $this->pageReferenceTableName(), ['page_id']);
+        $this->createIndex('{{%pagereference_page_all}}', $this->pageReferenceTableName(), ['page_id', 'className', 'reference_id']);
 
-        $this->addForeignKey('{{%pagedesign_page}}', $this->pageReferenceTableName(), ['page_id'], $this->pageTableName(), ['id'], 'cascade', NULL);
+        $this->addForeignKey('{{%pagereference_page}}', $this->pageReferenceTableName(), ['page_id'], $this->pageTableName(), ['id'], 'cascade', NULL);
 
 
+        /**
+         * This table will store the actual designs for each page.
+         */
         $this->createTable($this->pageDesignableName(), [
             'id' => Schema::TYPE_PK,
             'page_reference_id' => Schema::TYPE_INTEGER,
@@ -223,6 +207,10 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
         ], $tableOptions);
 
 
+        $this->createIndex('{{%pagedesign_reference_id}}', $this->pageDesignableName(), ['page_reference_id']);
+        
+        $this->addForeignKey('{{%pagedesign_reference}}', $this->pageReferenceTableName(), ['id'], $this->pageDesignableName(), ['page_reference_id'], 'cascade', NULL);
+        
     }
 
 

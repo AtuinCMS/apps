@@ -2,12 +2,12 @@
 
 namespace atuin\apps\config;
 
+use atuin\apps\models\Plugin;
+use atuin\config\models\ModelConfig;
 use atuin\engine\models\Page;
 use atuin\engine\models\PageDesign;
 use atuin\engine\models\PageReference;
 use atuin\engine\models\PageSections;
-use atuin\apps\models\Plugin;
-use atuin\config\models\ModelConfig;
 use atuin\engine\widgets\staticPage\models\StaticPlugin;
 
 /**
@@ -102,6 +102,9 @@ class AtuinConfig extends \atuin\skeleton\config\AtuinConfig
 
         // Adding Kartik GridView as basic grid
         ModelConfig::addConfig(NULL, 'modules', 'gridview', 'class', '\kartik\grid\Module', FALSE);
+
+        // Adding basic app market url
+        ModelConfig::addConfig('app-backend', 'modules', 'apps', 'appMarketUrls', ['http://webhost.zoltan.es/appMarket.json'], TRUE);
 
     }
 

@@ -19,7 +19,6 @@
     "php": ">=5.4.0",
     "yiisoft/yii2": ">=2.0.4",
     "atuin/engine": "*",
-    "2amigos/yii2-tinymce-widget": "*",
     "kartik-v/yii2-grid": "*",
     "cyneek/yii2-widget-urlparser": "*",
     "bower-asset/admin-lte": "*"
