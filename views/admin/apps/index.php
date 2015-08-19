@@ -38,25 +38,32 @@ $this->title = Yii::t('admin', 'Pages');
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'buttons' => [
-                                    'view' => function ($url, $model, $key) {
+                                    'view' => function ($url, $model, $key)
+                                    {
                                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',
                                             Yii::$app->getHomeUrl() . '/apps/view/' . $key, [
                                                 'title' => Yii::t('yii', 'View')]);
                                     },
-                                    'update' => function ($url, $model, $key) {
-                                        if ($model->isUpdated == FALSE) {
+                                    'update' => function ($url, $model, $key)
+                                    {
+                                        if ($model->isUpdated == FALSE)
+                                        {
                                             return Html::a('<span class="glyphicon glyphicon-refresh"></span>',
                                                 Yii::$app->getHomeUrl() . '/apps/update/' . $key, [
-                                                    'title' => Yii::t('yii', 'Update')]);
+                                                    'title' => Yii::t('yii', 'Update'),
+                                                    'data-confirm' => Yii::t('admin', 'Are you sure to update this App?'),
+                                                    'data-method' => 'post',]);
                                         }
 
                                     },
-                                    'delete' => function ($url, $model, $key) {
-                                        if ($model->core_module == 0) {
+                                    'delete' => function ($url, $model, $key)
+                                    {
+                                        if ($model->core_module == 0)
+                                        {
                                             return Html::a('<span class="glyphicon glyphicon-trash"></span>',
                                                 Yii::$app->getHomeUrl() . '/apps/delete/' . $key, [
                                                     'title' => Yii::t('yii', 'Delete'),
-                                                    'data-confirm' => Yii::t('yii', 'Are you sure to delete this item?'),
+                                                    'data-confirm' => Yii::t('admin', 'Are you sure to delete this App?'),
                                                     'data-method' => 'post',
                                                 ]);
                                         }

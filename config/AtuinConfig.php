@@ -45,7 +45,7 @@ class AtuinConfig extends \atuin\skeleton\config\AtuinConfig
     {
         $this->menuItems->add_menu_item('apps_head', NULL, NULL, 'Apps', 'plug', NULL);
         $this->menuItems->add_menu_item('apps_list', '@web/apps', 'apps_head', 'Intalled Apps', 'list-ul', NULL);
-        $this->menuItems->add_menu_item('apps_new', '@web/apps/market', 'apps_head', 'Add New', 'plus', NULL);
+        $this->menuItems->add_menu_item('apps_new', '@web/apps/market', 'apps_head', 'New App', 'plus', NULL);
         $this->menuItems->add_menu_item('pages_head', NULL, '@web/pages_head', 'Pages', 'file-o', NULL);
         $this->menuItems->add_menu_item('pages_dynamic', '@web/pages/dynamic', 'pages_head', 'Dynamic Pages', 'file', NULL);
         $this->menuItems->add_menu_item('pages_static', '@web/pages/static', 'pages_head', 'Static Pages', 'file-text', NULL);
@@ -71,11 +71,15 @@ class AtuinConfig extends \atuin\skeleton\config\AtuinConfig
             [
                 'admin' => [
                     'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@vendor/atuin/engine/messages', // example: @app/messages/fr/user.php
+                    'basePath' => '@vendor/atuin/engine/messages',
                 ],
                 'atuin-installation' => [
                     'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@vendor/atuin/engine/messages', // example: @app/messages/fr/user.php
+                    'basePath' => '@vendor/atuin/engine/messages',
+                ],
+                'menu' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@vendor/atuin/engine/messages',
                 ]
             ], FALSE);
 
@@ -131,7 +135,7 @@ class AtuinConfig extends \atuin\skeleton\config\AtuinConfig
         // used in the static pages
         $plugin = new Plugin();
         $plugin->namespace = StaticPlugin::className();
-        $plugin->private = true;
+        $plugin->private = TRUE;
         $plugin->save();
 
         // Adds the basic Page Sections

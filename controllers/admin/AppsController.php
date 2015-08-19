@@ -41,15 +41,16 @@ class AppsController extends BaseAdminController
     public function actionInstall($appId)
     {
         // Must be a post call
-
-        if (Yii::$app->request->getIsPost() === FALSE) {
+        if (Yii::$app->request->getIsPost() === FALSE)
+        {
             throw new BadRequestHttpException(Yii::t('admin', "Bad call method."));
         }
 
         $modelApp = new ModelApp();
 
         // Check if App is not installed
-        if (!array_key_exists($appId, $modelApp->getNotInstalledMarketApps())) {
+        if (!array_key_exists($appId, $modelApp->getNotInstalledMarketApps()))
+        {
             throw new \yii\web\NotFoundHttpException(Yii::t('admin', "Selected App doesn't exist in the market."));
         }
 
@@ -85,12 +86,23 @@ class AppsController extends BaseAdminController
     /**
      * Updates the selected App passing its row id
      *
-     * @param $id
+     * @param int $id
      * @return \yii\web\Response
+     * @throws BadRequestHttpException
      */
     public function actionUpdate($id)
     {
+        
+        
+        // Must be a post call
+        if (Yii::$app->request->getIsPost() === FALSE)
+        {
+            throw new BadRequestHttpException(Yii::t('admin', "Bad call method."));
+        }
+
+
         $modelApp = new ModelApp();
+        $modelApp->updateApp($id);
 
         return $this->goBack();
     }

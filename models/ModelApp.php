@@ -90,9 +90,9 @@ class ModelApp extends Model
 
         foreach ($installedApps as $app)
         {
-            if (array_key_exists($app->className, $appList))
+            if (array_key_exists($app->app_id, $appList))
             {
-                unset($appList[$app->className]);
+                unset($appList[$app->app_id]);
             }
         }
 
@@ -111,7 +111,7 @@ class ModelApp extends Model
 
         if ($cacheData)
         {
-    //        return $cacheData;
+            //        return $cacheData;
         }
 
         $urls = Yii::$app->getModule('apps')->appMarketUrls;
@@ -215,22 +215,36 @@ class ModelApp extends Model
     }
 
 
-    public function updateApp($appId)
+    /**
+     * Updates the app from the id passed via parameter
+     *
+     * @param int $id
+     * @throws \Exception
+     * @throws \yii\base\Exception
+     */
+    public function updateApp($id)
     {
         $appLoader = new AppLoader();
 
 
         /** @var App $appData */
-        $appData = App::findOne($appId);
+        $appData = App::findOne($id);
 
         // get the market data for the app because there is where it's stored the installation data
         $marketData = $this->getAppMarketData($appData->app_id);
-        
-        $installationHandler = $this->getInstallationHandler($marketData);
+
+        // Gets the installation handler, usually will be based in composer to update the module data
+        $installationHandler = $this->getInstallationHandler([
+            'id' => $appData->app_id,
+            'namespace' => $appData->namespace,
+            'composerPackage' => $marketData[$appData->app_id]['composerPackage']
+        ]);
 
         /** @var \atuin\skeleton\Module $module */
         $module = $appLoader->updateApp($appData->app_id, $installationHandler);
 
+        // Define the actions that will be made to update the App, in this case, the App 
+        // database update and config update
         $installActions = [new AppManagement(), new AppConfigManagement()];
 
         AppInstaller::execute($module, $installActions, 'update');

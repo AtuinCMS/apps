@@ -29,3 +29,4 @@ Route::get('apps', 'apps/admin/apps');
 Route::any('apps/market', 'apps/admin/apps/market');
 Route::post('apps/install/{app-id}', 'apps/admin/apps/install')->where(['app-id' => '(:any)']);
 Route::any('apps/update/{id}', 'apps/admin/apps/update', ['before' => ['before' => 'checkAppId']]);
+

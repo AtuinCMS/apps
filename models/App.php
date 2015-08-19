@@ -110,7 +110,7 @@ class App extends ActiveRecord
         if (is_null($this->_isUpdated)) {
             $appData = ModelApp::getAppMarketData($this->app_id);
 
-            if ($appData['version'] != $this->version) {
+            if (!empty($appData) && $appData[$this->app_id]['version'] !== $this->version) {
                 $this->_isUpdated = FALSE;
             } else {
                 $this->_isUpdated = TRUE;
