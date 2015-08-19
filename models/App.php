@@ -15,6 +15,7 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property string $name
+ * @property string $app_id
  * @property string $description
  * @property string $className
  * @property string $directory
@@ -107,9 +108,9 @@ class App extends ActiveRecord
     public function getIsUpdated()
     {
         if (is_null($this->_isUpdated)) {
-            $appMarket = ModelApp::getAppMarket();
+            $appData = ModelApp::getAppMarketData($this->app_id);
 
-            if (array_key_exists($this->namespace, $appMarket) && $appMarket['namespace']['version'] != $this->version) {
+            if ($appData['version'] != $this->version) {
                 $this->_isUpdated = FALSE;
             } else {
                 $this->_isUpdated = TRUE;

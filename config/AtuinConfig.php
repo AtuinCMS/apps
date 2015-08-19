@@ -45,7 +45,7 @@ class AtuinConfig extends \atuin\skeleton\config\AtuinConfig
     {
         $this->menuItems->add_menu_item('apps_head', NULL, NULL, 'Apps', 'plug', NULL);
         $this->menuItems->add_menu_item('apps_list', '@web/apps', 'apps_head', 'Intalled Apps', 'list-ul', NULL);
-        $this->menuItems->add_menu_item('apps_new', '@web/apps/add', 'apps_head', 'Add New', 'plus', NULL);
+        $this->menuItems->add_menu_item('apps_new', '@web/apps/market', 'apps_head', 'Add New', 'plus', NULL);
         $this->menuItems->add_menu_item('pages_head', NULL, '@web/pages_head', 'Pages', 'file-o', NULL);
         $this->menuItems->add_menu_item('pages_dynamic', '@web/pages/dynamic', 'pages_head', 'Dynamic Pages', 'file', NULL);
         $this->menuItems->add_menu_item('pages_static', '@web/pages/static', 'pages_head', 'Static Pages', 'file-text', NULL);

@@ -15,7 +15,7 @@ $this->title = Yii::t('admin', 'Pages');
         <div class="box-body">
             <p>
                 <?= Html::a(Yii::t('admin', 'Add new App'),
-                    ['../apps/add'],
+                    ['../apps/market'],
                     ['class' => 'btn btn-success']) ?>
 
                 <?php \yii\widgets\Pjax::begin(); ?>
@@ -30,29 +30,35 @@ $this->title = Yii::t('admin', 'Pages');
                             ['class' => 'yii\grid\SerialColumn'],
                             'name',
                             'version',
-                            'install_date',
+                            [
+                                'format' => ['date', 'php:d/m/Y'],
+                                'attribute' => 'install_date',
+                            ],
                             'description',
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'buttons' => [
                                     'view' => function ($url, $model, $key) {
-                                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
-                                            'title' => Yii::t('yii', 'View')]);
+                                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',
+                                            Yii::$app->getHomeUrl() . '/apps/view/' . $key, [
+                                                'title' => Yii::t('yii', 'View')]);
                                     },
                                     'update' => function ($url, $model, $key) {
                                         if ($model->isUpdated == FALSE) {
-                                            return Html::a('<span class="glyphicon glyphicon-refresh"></span>', $url, [
-                                                'title' => Yii::t('yii', 'Update')]);
+                                            return Html::a('<span class="glyphicon glyphicon-refresh"></span>',
+                                                Yii::$app->getHomeUrl() . '/apps/update/' . $key, [
+                                                    'title' => Yii::t('yii', 'Update')]);
                                         }
 
                                     },
                                     'delete' => function ($url, $model, $key) {
                                         if ($model->core_module == 0) {
-                                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-                                                'title' => Yii::t('yii', 'Delete'),
-                                                'data-confirm' => Yii::t('yii', 'Are you sure to delete this item?'),
-                                                'data-method' => 'post',
-                                            ]);
+                                            return Html::a('<span class="glyphicon glyphicon-trash"></span>',
+                                                Yii::$app->getHomeUrl() . '/apps/delete/' . $key, [
+                                                    'title' => Yii::t('yii', 'Delete'),
+                                                    'data-confirm' => Yii::t('yii', 'Are you sure to delete this item?'),
+                                                    'data-method' => 'post',
+                                                ]);
                                         }
                                     }
                                 ]

@@ -60,7 +60,8 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
          */
         $this->createTable($this->appsTableName(), [
             'id' => Schema::TYPE_PK,
-            'name' => Schema::TYPE_STRING . '(25) NOT NULL',
+            'name' => Schema::TYPE_STRING . '(50) NOT NULL',
+            'app_id' => Schema::TYPE_STRING . '(50) NOT NULL',
             'description' => Schema::TYPE_TEXT,
             'className' => Schema::TYPE_STRING . '(255) NOT NULL',
             'directory' => Schema::TYPE_STRING . '(255) NOT NULL',
