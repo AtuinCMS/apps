@@ -2,11 +2,7 @@
 
 namespace atuin\apps\config;
 
-use atuin\apps\models\Plugin;
 use atuin\config\models\ModelConfig;
-use atuin\engine\models\Page;
-use atuin\engine\models\PageDesign;
-use atuin\engine\models\PageReference;
 use atuin\engine\models\PageSections;
 
 

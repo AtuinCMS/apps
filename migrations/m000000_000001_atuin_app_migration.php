@@ -50,8 +50,9 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
 
     public function safeUp()
     {
-        $tableOptions = null;
-        if (Yii::$app->db->driverName === 'mysql') {
+        $tableOptions = NULL;
+        if (Yii::$app->db->driverName === 'mysql')
+        {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
@@ -172,7 +173,7 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
          * pages per se. We are using a junction table because probably we will
          * need different page designs for the same page depending from the data
          * it's loaded in them.
-         * 
+         *
          * If reference_id it's null we will count that rows as the default designs for those pages
          */
         $this->createTable($this->pageReferenceTableName(), [
@@ -209,9 +210,9 @@ class m000000_000001_atuin_app_migration extends \yii\db\Migration
 
 
         $this->createIndex('{{%pagedesign_reference_id}}', $this->pageDesignableName(), ['page_reference_id']);
-        
-        $this->addForeignKey('{{%pagedesign_reference}}', $this->pageReferenceTableName(), ['id'], $this->pageDesignableName(), ['page_reference_id'], 'cascade', NULL);
-        
+
+        $this->addForeignKey('{{%pagedesign_reference}}', $this->pageDesignableName(), ['page_reference_id'], $this->pageReferenceTableName(), ['id'], 'cascade', NULL);
+
     }
 
 
