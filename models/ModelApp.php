@@ -9,6 +9,7 @@ use atuin\installation\app_installation\AppManagement;
 use atuin\installation\app_installation\helpers\FactoryCommandHelper;
 use atuin\installation\helpers\ComposerAppHandler;
 use Yii;
+use yii\base\ErrorException;
 use yii\base\InvalidParamException;
 use yii\base\Model;
 use yii\caching\TagDependency;
@@ -161,12 +162,16 @@ class ModelApp extends Model
      */
     public function installAppFromID($appId)
     {
-        $appList = $this->getAppMarket();
+        $appList = $this->getAppMarketData($appId);
 
         if (array_key_exists($appId, $appList))
         {
             $data = $appList[$appId];
-            $this->installAppFromData($data);
+            $this->installAppFromData([
+                'id' => $data['id'],
+                'composerPackage' => $data['composerPackage'],
+                'namespace' => $data['namespace']
+            ]);
         }
         else
         {
@@ -233,7 +238,7 @@ class ModelApp extends Model
         // get the market data for the app because there is where it's stored the installation data
         $marketData = $this->getAppMarketData($appData->app_id);
 
-        // Gets the installation handler, usually will be based in composer to update the module data
+        // Gets the installation handler, usually will be based in composer, to update the module data
         $installationHandler = $this->getInstallationHandler([
             'id' => $appData->app_id,
             'namespace' => $appData->namespace,
@@ -241,15 +246,55 @@ class ModelApp extends Model
         ]);
 
         /** @var \atuin\skeleton\Module $module */
-        $module = $appLoader->updateApp($appData->app_id, $installationHandler);
+        $module = $appLoader->updateApp($installationHandler);
 
         // Define the actions that will be made to update the App, in this case, the App 
         // database update and config update
         $installActions = [new AppManagement(), new AppConfigManagement()];
 
         AppInstaller::execute($module, $installActions, 'update');
-
     }
+
+
+    public function deleteApp($id)
+    {
+        /** @var App $appData */
+        $appData = App::findOne($id);
+
+        if ($appData->core_module == 1)
+        {
+            throw new ErrorException("It's not possible to delete a Core App.");
+        }
+
+        // Get the market data for the app because there is where it's stored the installation data
+        $marketData = $this->getAppMarketData($appData->app_id);
+
+        $appLoader = new AppLoader();
+
+        /** @var \atuin\skeleton\Module $module */
+        $module = $appLoader->getModule($appData->app_id, $appData->namespace, $appData->directory);
+
+        // Define the actions that will be made to update the App, in this case, the App
+        // database update and config update
+
+        // This will have different order than the install and update because we want to first
+        // delete the config and then the App data
+        $installActions = [new AppConfigManagement(), new AppManagement()];
+
+        AppInstaller::execute($module, $installActions, 'uninstall');
+
+        // Gets the uninstallation handler, usually will be based in composer, to delete the module data
+        $installationHandler = $this->getInstallationHandler([
+            'id' => $appData->app_id,
+            'namespace' => $appData->namespace,
+            'composerPackage' => $marketData[$appData->app_id]['composerPackage']
+        ]);
+
+        /* Delete the App physically, last step to uninstall the App Module */
+        /** @var \atuin\skeleton\Module $module */
+        $appLoader->deleteApp($installationHandler);
+    }
+
 
     /**
      * Decides which module handler type to use for CRUD the Apps
@@ -276,7 +321,6 @@ class ModelApp extends Model
         }
 
         return $installationHandler;
-
     }
 
 

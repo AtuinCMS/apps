@@ -52,8 +52,35 @@ class App extends ActiveRecord
         $this->on($this::EVENT_AFTER_UPDATE, [$this, '_deleteCache']);
 
         $this->on($this::EVENT_AFTER_DELETE, [$this, '_deleteCache']);
+
+        $this->on($this::EVENT_BEFORE_DELETE, [$this, '_deleteConnections']);
     }
 
+    public function _deleteConnections(Event $event)
+    {
+        /** @var AppConnections[] $appConnections */
+        $appConnections = AppConnections::find()->where(['app_id' => $this->id])->all();
+
+        $orderedConnection = [];
+
+        foreach ($appConnections as $connections)
+        {
+            $orderedConnection[$connections->type][] = $connections;
+        }
+
+        foreach ($orderedConnection as $type => $connections)
+        {
+            $deleteList = [];
+
+            foreach ($connections as $dataConnection)
+            {
+                $deleteList[] = $dataConnection->reference_id;
+            }
+
+            $type::deleteAll([$deleteList]);
+        }
+
+    }
 
     /**
      * Deletes the cache for the frontend and backend loaded data using makeCacheTag method
@@ -65,8 +92,10 @@ class App extends ActiveRecord
         $frontend = [0, 1];
         $backend = [0, 1];
 
-        foreach ($frontend as $_f) {
-            foreach ($backend as $_b) {
+        foreach ($frontend as $_f)
+        {
+            foreach ($backend as $_b)
+            {
                 TagDependency::invalidate(Yii::$app->cache, self::makeCacheTag($_f, $_b));
             }
         }
@@ -100,19 +129,24 @@ class App extends ActiveRecord
     public function getConfigs()
     {
         return $this->hasMany(Config::className(), ['id' => 'reference_id'])
-            ->via('appConnections', function ($query) {
+            ->via('appConnections', function ($query)
+            {
                 $query->where(['type' => Config::className()]);
             });
     }
 
     public function getIsUpdated()
     {
-        if (is_null($this->_isUpdated)) {
+        if (is_null($this->_isUpdated))
+        {
             $appData = ModelApp::getAppMarketData($this->app_id);
 
-            if (!empty($appData) && $appData[$this->app_id]['version'] !== $this->version) {
+            if (!empty($appData) && $appData[$this->app_id]['version'] !== $this->version)
+            {
                 $this->_isUpdated = FALSE;
-            } else {
+            }
+            else
+            {
                 $this->_isUpdated = TRUE;
             }
         }
@@ -120,5 +154,6 @@ class App extends ActiveRecord
         return $this->_isUpdated;
 
     }
+
 
 }

@@ -8,7 +8,7 @@ use atuin\engine\models\Page;
 use atuin\engine\models\PageDesign;
 use atuin\engine\models\PageReference;
 use atuin\engine\models\PageSections;
-use atuin\engine\widgets\staticPage\models\StaticPlugin;
+
 
 /**
  * Class ConfigSkeleton
@@ -48,7 +48,6 @@ class AtuinConfig extends \atuin\skeleton\config\AtuinConfig
         $this->menuItems->add_menu_item('apps_new', '@web/apps/market', 'apps_head', 'New App', 'plus', NULL);
         $this->menuItems->add_menu_item('pages_head', NULL, '@web/pages_head', 'Pages', 'file-o', NULL);
         $this->menuItems->add_menu_item('pages_dynamic', '@web/pages/dynamic', 'pages_head', 'Dynamic Pages', 'file', NULL);
-        $this->menuItems->add_menu_item('pages_static', '@web/pages/static', 'pages_head', 'Static Pages', 'file-text', NULL);
     }
 
 
@@ -125,18 +124,7 @@ class AtuinConfig extends \atuin\skeleton\config\AtuinConfig
      */
     public function upManual()
     {
-        // Adds the static page
-        $page = new Page();
-        $page->name = 'Static page';
-        $page->parameters = json_encode([['class' => StaticPlugin::className()]]);
-        $page->save();
 
-        // Adds the static page plugin
-        // used in the static pages
-        $plugin = new Plugin();
-        $plugin->namespace = StaticPlugin::className();
-        $plugin->private = TRUE;
-        $plugin->save();
 
         // Adds the basic Page Sections
         $section = new PageSections();
@@ -144,16 +132,6 @@ class AtuinConfig extends \atuin\skeleton\config\AtuinConfig
         $section->cols = 1;
         $section->cols_sizes = '12';
         $section->save();
-
-        // Adds the Static Page Design
-        $pageReference = new PageReference();
-        $pageReference->page_id = $page->id;
-        $pageReference->save();
-
-        $pageDesign = new PageDesign();
-        $pageDesign->page_reference_id = $pageReference->id;
-        $pageDesign->section_id = $section->id;
-        $pageDesign->plugins = json_encode([[$plugin->id]]);
 
     }
 

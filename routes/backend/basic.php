@@ -20,6 +20,22 @@ Route::filter('checkAppId', function () {
 
 });
 
+/**
+ * Checks if the App Market Id exists in the market
+ */
+Route::filter('checkAppMarketId', function () {
+
+    /** @var array $app */
+    $app = \atuin\apps\models\ModelApp::getAppMarketData(Route::input('AppMarketId'));
+
+
+    if (empty($app)) {
+        throw new \yii\web\NotFoundHttpException(Yii::t('admin', "App is not located in the market."));
+    }
+    return TRUE;
+
+});
+
 
 /**
  * Apps
@@ -27,6 +43,5 @@ Route::filter('checkAppId', function () {
 
 Route::get('apps', 'apps/admin/apps');
 Route::any('apps/market', 'apps/admin/apps/market');
-Route::post('apps/install/{app-id}', 'apps/admin/apps/install')->where(['app-id' => '(:any)']);
-Route::any('apps/update/{id}', 'apps/admin/apps/update', ['before' => ['before' => 'checkAppId']]);
-
+Route::post('apps/install/{AppMarketId}', 'apps/admin/apps/install', ['before' => ['before' => 'checkAppMarketId']]);
+Route::post('apps/update/{id}', 'apps/admin/apps/update', ['before' => ['before' => 'checkAppId']]);

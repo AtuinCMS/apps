@@ -38,7 +38,7 @@ class AppsController extends BaseAdminController
      * @throws \Exception
      * @throws \yii\web\NotFoundHttpException
      */
-    public function actionInstall($appId)
+    public function actionInstall($AppMarketId)
     {
         // Must be a post call
         if (Yii::$app->request->getIsPost() === FALSE)
@@ -48,16 +48,10 @@ class AppsController extends BaseAdminController
 
         $modelApp = new ModelApp();
 
-        // Check if App is not installed
-        if (!array_key_exists($appId, $modelApp->getNotInstalledMarketApps()))
-        {
-            throw new \yii\web\NotFoundHttpException(Yii::t('admin', "Selected App doesn't exist in the market."));
-        }
-
         // Installs the App passing the AppId
-        $modelApp->installAppFromID($appId);
+        $modelApp->installAppFromID($AppMarketId);
 
-        return $this->goBack();
+        return $this->redirect('@web/apps/market');
     }
 
     /**
@@ -92,18 +86,38 @@ class AppsController extends BaseAdminController
      */
     public function actionUpdate($id)
     {
-        
-        
         // Must be a post call
         if (Yii::$app->request->getIsPost() === FALSE)
         {
             throw new BadRequestHttpException(Yii::t('admin', "Bad call method."));
         }
 
-
         $modelApp = new ModelApp();
         $modelApp->updateApp($id);
 
-        return $this->goBack();
+        return $this->redirect('@web/apps/market');
+    }
+
+
+    /**
+     * Deletes the selected App passing its row id
+     * @param $id
+     *
+     * @param $id
+     * @return \yii\web\Response
+     * @throws BadRequestHttpException
+     */
+    public function actionDelete($id)
+    {
+        // Must be a post call
+        if (Yii::$app->request->getIsPost() === FALSE)
+        {
+            throw new BadRequestHttpException(Yii::t('admin', "Bad call method."));
+        }
+
+        $modelApp = new ModelApp();
+        $modelApp->deleteApp($id);
+
+        return $this->redirect('@web/apps/market');
     }
 }
